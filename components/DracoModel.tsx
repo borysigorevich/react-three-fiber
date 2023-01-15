@@ -32,6 +32,7 @@ const DracoModel = (props: {}) => {
                 <mesh
                     castShadow
                     receiveShadow
+                    /*@ts-ignore*/
                     geometry={nodes.meat.geometry}
                     material={materials.SteakMaterial}
                     position={[0, 2.82, 0]}
@@ -39,6 +40,7 @@ const DracoModel = (props: {}) => {
                 <mesh
                     castShadow
                     receiveShadow
+                    /*@ts-ignore*/
                     geometry={nodes.topBun.geometry}
                     material={materials.BunMaterial}
                     position={[0, 1.77, 0]}
@@ -46,12 +48,14 @@ const DracoModel = (props: {}) => {
                 <mesh
                     castShadow
                     receiveShadow
+                    /*@ts-ignore*/
                     geometry={nodes.bottomBun.geometry}
                     material={materials.BunMaterial}
                 />
                 <mesh
                     castShadow
                     receiveShadow
+                    /*@ts-ignore*/
                     geometry={nodes.cheese.geometry}
                     material={materials.CheeseMaterial}
                     position={[0, 3.04, 0]}

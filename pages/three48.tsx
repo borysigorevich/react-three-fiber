@@ -31,6 +31,7 @@ const Three48 = () => {
 
     useFrame((state, delta) => {
 
+        // @ts-ignore
         portalShaderRef.current!.uTime += delta
 
     })
@@ -45,12 +46,14 @@ const Three48 = () => {
 
             <Center>
                 <mesh
+                    /*@ts-ignore*/
                     geometry={nodes.baked.geometry}
                 >
                     <meshBasicMaterial map={bakedTexture} map-flipY={false}/>
                 </mesh>
 
                 <mesh
+                    /*@ts-ignore*/
                     geometry={nodes.poleLightA.geometry}
                     position={nodes.poleLightA.position}
                 >
@@ -58,6 +61,7 @@ const Three48 = () => {
                 </mesh>
 
                 <mesh
+                    /*@ts-ignore*/
                     geometry={nodes.poleLightB.geometry}
                     position={nodes.poleLightB.position}
                 >
@@ -65,6 +69,7 @@ const Three48 = () => {
                 </mesh>
 
                 <mesh
+                    /*@ts-ignore*/
                     geometry={nodes.portalLight.geometry}
                     position={nodes.portalLight.position}
                     rotation={nodes.portalLight.rotation}
