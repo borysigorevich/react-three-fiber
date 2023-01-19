@@ -5,7 +5,6 @@ import {OrbitControls} from "@react-three/drei";
 import {Canvas} from "@react-three/fiber";
 import React from "react";
 
-
 export default function App({Component, pageProps}: AppProps) {
     return <main className='h-screen'>
         <Canvas

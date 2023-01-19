@@ -20,7 +20,6 @@ const DracoModel = (props: {}) => {
 
     const {nodes, materials} = useGLTF('/hamburger-draco.glb')
 
-
     console.log('draco model render')
 
     return (

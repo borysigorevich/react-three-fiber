@@ -1,6 +1,6 @@
 import React, {useEffect} from 'react';
 import {useGLTF, useAnimations} from '@react-three/drei'
-import {useControls, button} from 'leva'
+import {useControls} from 'leva'
 
 export const FoxModel = () => {
 
