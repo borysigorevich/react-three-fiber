@@ -1,11 +1,24 @@
-import React, {useRef, useEffect, useState} from 'react';
+import React, {useRef, useEffect, useState, useMemo} from 'react';
 
 import {useKeyboardControls, Grid, useGLTF} from '@react-three/drei'
-import {useThree, useFrame,} from '@react-three/fiber'
-import {Physics, RigidBody, Debug, CuboidCollider, RigidBodyApi, CylinderCollider} from '@react-three/rapier'
+import {useThree, useFrame, extend} from '@react-three/fiber'
+import {
+    Physics,
+    RigidBody,
+    Debug,
+    CuboidCollider,
+    RigidBodyApi,
+    CylinderCollider,
+    InstancedRigidBodies,
+    Vector3Array,
+} from '@react-three/rapier'
 import {Perf} from 'r3f-perf'
-import {Mesh, Euler, Quaternion, Vector3} from "three";
+import {Mesh, Euler, Quaternion, Vector3, InstancedMesh, Matrix4} from "three";
 import {Controls} from "./_app";
+
+// const instancedMesh = new InstancedMesh(undefined, undefined, 100)
+//
+// extend({InstancedMesh: instancedMesh})
 
 const Three52 = () => {
 
@@ -17,6 +30,7 @@ const Three52 = () => {
     const twister = useRef<RigidBodyApi | null>(null)
     const twisterRef = useRef<Mesh | null>(null)
     const cubeRef = useRef<Mesh | null>(null)
+    const cubes = useRef<InstancedMesh | null>(null)
 
     const cubeJump = () => {
         cube.current?.applyImpulse({x: 1, y: 5, z: 0})
@@ -64,20 +78,52 @@ const Three52 = () => {
         // console.log(cubeRef.current?.position)
 
         const elapsedTime = state.clock.elapsedTime
-        const eulerRotation = new Euler(0, elapsedTime, 0)
+        const eulerRotation = new Euler(0, elapsedTime * 3, 0)
         const quaternionRotation = new Quaternion()
         quaternionRotation.setFromEuler(eulerRotation)
         twister.current?.setNextKinematicRotation(quaternionRotation)
 
         const angle = elapsedTime * 0.5
-        const x = Math.cos(angle) * 2
-        const z = Math.sin(angle) * 2
+        const x = Math.cos(angle) * 5
+        const z = Math.sin(angle) * 5
         twister.current?.setNextKinematicTranslation({x, y: -1.1, z})
 
         // console.log(twisterRef.current?.position)
     })
 
     console.log(cubeRef.current?.getWorldPosition(vec)!)
+
+    const cubesCount = 300
+
+    useEffect(() => {
+        for (let i = 0; i < cubesCount; i++) {
+            const matrix4 = new Matrix4()
+            matrix4.compose(
+                new Vector3(i * 2, 0, 0),
+                new Quaternion(),
+                new Vector3(1, 1, 1)
+            )
+            cubes.current?.setMatrixAt(i, matrix4)
+        }
+    }, [])
+
+    const cubeTransforms = useMemo(() => {
+        const positions: Vector3Array[] = []
+        const rotations: Vector3Array[] = []
+        const scales: Vector3Array[] = []
+
+        for (let i = 0; i < cubesCount; i++) {
+            positions.push([(Math.random() - 0.5) * 10, i + 5, (Math.random() - 0.5) * 10])
+            rotations.push([0, 0, 0])
+            scales.push([1, 1, 1])
+        }
+
+        return {
+            positions,
+            rotations,
+            scales,
+        }
+    }, [])
 
     const moveCube = (event: KeyboardEvent) => {
         // switch (event.key) {
@@ -212,30 +258,48 @@ const Three52 = () => {
 
                 <RigidBody type='fixed' friction={0}>
                     <mesh receiveShadow position-y={-1.5}>
-                        <boxGeometry args={[20, 0.5, 20]}/>
+                        <boxGeometry args={[30, 0.5, 30]}/>
                         <meshStandardMaterial color='#1BD387'/>
                     </mesh>
 
-                    <mesh receiveShadow position={[0, .75, 10]} rotation-x={Math.PI * -0.5}>
-                        <boxGeometry args={[20.5, 0.5, 5]}/>
+                    <mesh receiveShadow position={[0, .75, 15]} rotation-x={Math.PI * -0.5}>
+                        <boxGeometry args={[30.5, 0.5, 5]}/>
                         <meshStandardMaterial color='#1BD387'/>
                     </mesh>
 
-                    <mesh receiveShadow position={[0, .75, -10]} rotation-x={Math.PI * -0.5}>
-                        <boxGeometry args={[20.5, 0.5, 5]}/>
+                    <mesh receiveShadow position={[0, .75, -15]} rotation-x={Math.PI * -0.5}>
+                        <boxGeometry args={[30.5, 0.5, 5]}/>
                         <meshStandardMaterial color='#1BD387'/>
                     </mesh>
 
-                    <mesh receiveShadow position={[-10, .75, 0]} rotation-x={Math.PI * -0.5} rotation-z={Math.PI * -0.5}>
-                        <boxGeometry args={[20, 0.5, 5]}/>
+                    <mesh receiveShadow position={[-15, .75, 0]} rotation-x={Math.PI * -0.5}
+                          rotation-z={Math.PI * -0.5}>
+                        <boxGeometry args={[30, 0.5, 5]}/>
                         <meshStandardMaterial color='#1BD387'/>
                     </mesh>
 
-                    <mesh receiveShadow position={[10, .75, 0]} rotation-x={Math.PI * -0.5} rotation-z={Math.PI * -0.5}>
-                        <boxGeometry args={[20, 0.5, 5]}/>
+                    <mesh receiveShadow position={[15, .75, 0]} rotation-x={Math.PI * -0.5} rotation-z={Math.PI * -0.5}>
+                        <boxGeometry args={[30, 0.5, 5]}/>
                         <meshStandardMaterial color='#1BD387'/>
                     </mesh>
                 </RigidBody>
+
+                {/*<instansedMesh args={[null, null, cubesCount]} ref={cubes}>*/}
+                {/*    <boxGeometry/>*/}
+                {/*    <meshStandardMaterial/>*/}
+                {/*</instansedMesh>*/}
+
+                <InstancedRigidBodies
+
+                    positions={ cubeTransforms.positions }
+                    rotations={ cubeTransforms.rotations }
+                    scales={ cubeTransforms.scales }
+                >
+                    <instancedMesh ref={cubes} castShadow receiveShadow args={[undefined, undefined, cubesCount]}>
+                        <boxGeometry/>
+                        <meshStandardMaterial color="tomato"/>
+                    </instancedMesh>
+                </InstancedRigidBodies>
 
 
                 <RigidBody position={[4, 4, 0]}>
