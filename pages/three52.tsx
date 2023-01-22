@@ -96,15 +96,15 @@ const Three52 = () => {
     const cubesCount = 300
 
     useEffect(() => {
-        for (let i = 0; i < cubesCount; i++) {
-            const matrix4 = new Matrix4()
-            matrix4.compose(
-                new Vector3(i * 2, 0, 0),
-                new Quaternion(),
-                new Vector3(1, 1, 1)
-            )
-            cubes.current?.setMatrixAt(i, matrix4)
-        }
+        // for (let i = 0; i < cubesCount; i++) {
+        //     const matrix4 = new Matrix4()
+        //     matrix4.compose(
+        //         new Vector3(i * 2, 0, 0),
+        //         new Quaternion(),
+        //         new Vector3(1, 1, 1)
+        //     )
+        //     cubes.current?.setMatrixAt(i, matrix4)
+        // }
     }, [])
 
     const cubeTransforms = useMemo(() => {

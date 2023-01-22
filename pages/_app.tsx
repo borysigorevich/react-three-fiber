@@ -19,7 +19,7 @@ export default function App({Component, pageProps}: AppProps) {
         {name: Controls.back, keys: ['ArrowDown', 's', 'S']},
         {name: Controls.left, keys: ['ArrowLeft', 'a', 'A']},
         {name: Controls.right, keys: ['ArrowRight', 'd', 'D']},
-        {name: Controls.jump, keys: ['Space']},
+        {name: Controls.jump, keys: ['Space', ' ', 'space']},
     ], [])
 
     return <main className='h-screen'>
