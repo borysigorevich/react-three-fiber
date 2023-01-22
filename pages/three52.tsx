@@ -24,7 +24,6 @@ const Three52 = () => {
 
     const [hitAudio] = useState(() => new Audio('/hit.mp3'))
     const hamburger = useGLTF('/hamburger.glb')
-    console.log(hitAudio)
 
     const cube = useRef<RigidBodyApi | null>(null)
     const twister = useRef<RigidBodyApi | null>(null)
@@ -69,7 +68,8 @@ const Three52 = () => {
             // if(cubeRef.current) cubeRef.current.position.x += 0.1
         }
         if (jumpPressed) {
-            cube.current?.applyImpulse({x: 0, y: 0.1, z: 0})
+            console.log('jump space clicked')
+            cube.current?.applyImpulse({x: 0, y: 0.3, z: 0})
             // if(cubeRef.current) cubeRef.current.position.y += 0.1
         }
 
@@ -91,9 +91,7 @@ const Three52 = () => {
         // console.log(twisterRef.current?.position)
     })
 
-    console.log(cubeRef.current?.getWorldPosition(vec)!)
-
-    const cubesCount = 300
+    const cubesCount = 50
 
     useEffect(() => {
         // for (let i = 0; i < cubesCount; i++) {
@@ -193,7 +191,7 @@ const Three52 = () => {
                     colliders={false}
                     // friction={0}
                     onSleep={() => {
-                        console.log('sleep')
+                        // console.log('sleep')
                     }}
                 >
                     <mesh castShadow onClick={cubeJump} ref={cubeRef}>
@@ -206,7 +204,7 @@ const Three52 = () => {
 
                 <RigidBody
                     onCollisionEnter={(event) => {
-                        console.log(event)
+                        // console.log(event)
                         hitAudio.play()
                     }}
                     // restitution={1}
