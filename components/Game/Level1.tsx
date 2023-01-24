@@ -29,7 +29,6 @@ const BlockStart = (
     }: BlockStartType
 ) => {
     return (
-
         <group position={position}>
             <mesh
                 position-y={-0.1}
@@ -203,23 +202,17 @@ export const BlockEnd = (
     )
 }
 
-const SideWall = ({
-                      position,
-                      wallLength,
-                      receiveShadow
-                  }: { position: number, wallLength: number, receiveShadow: boolean }) => {
-
-    const wallRef = useRef<Mesh | null>(null)
-
-    useEffect(() => {
-        console.log(wallRef, '***')
-    }, [])
+const SideWall = (
+    {
+        position,
+        wallLength,
+        receiveShadow
+    }: { position: number, wallLength: number, receiveShadow: boolean }) => {
 
     const zScale = 8 + (wallLength * 4)
 
     return (
         <mesh
-            ref={wallRef}
             geometry={boxGeometry}
             material={wallMaterial}
             scale={[1.9, 0.3, zScale]}

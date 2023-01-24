@@ -40,7 +40,7 @@ export default function App({Component, pageProps}: AppProps) {
                 <Component {...pageProps} />
             </KeyboardControls>
             {/*<color args={['#20d0ae']} attach='background'/>*/}
-            <OrbitControls makeDefault/>
+            {/*<OrbitControls makeDefault/>*/}
         </Canvas>
     </main>
 
