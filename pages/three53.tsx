@@ -72,7 +72,7 @@ const Three53 = () => {
                 <Level1 count={blocksCount} types={[BlockSpinner, BlockLimbo, BlockAxe]}/>
                 <Player/>
             </Physics>
-            <Effects/>
+            {/*<Effects/>*/}
             <color args={['#252731']} attach='background'/>
             {/*<Sky/>*/}
         </>
