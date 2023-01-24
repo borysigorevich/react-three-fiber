@@ -4,9 +4,11 @@ import {Vector3, BoxGeometry, MeshStandardMaterial, ColorManagement, Quaternion,
 import {useFrame} from '@react-three/fiber'
 import {useGLTF} from '@react-three/drei'
 import {RigidBody, RigidBodyApi, CuboidCollider} from '@react-three/rapier'
+import {useControls} from "leva";
 
 type BlockStartType = {
     position?: Vector3
+    speedMultiply?: number
 }
 
 type Level1Type = {
@@ -19,7 +21,7 @@ ColorManagement.legacyMode = false
 const boxGeometry = new BoxGeometry(1, 1, 1)
 
 const floor1Material = new MeshStandardMaterial({color: 'limegreen'})
-const floor2Material = new MeshStandardMaterial({color: 'greenyellow'})
+const floor2Material = new MeshStandardMaterial({color: `hsl(${Math.random() * 360}, 50%, 75%)`})
 const obstacleMaterial = new MeshStandardMaterial({color: 'orangered'})
 const wallMaterial = new MeshStandardMaterial({color: 'slategrey'})
 
@@ -41,7 +43,7 @@ const BlockStart = (
     )
 }
 
-export const BlockSpinner = ({position = new Vector3(0, 0, 0)}: BlockStartType) => {
+export const BlockSpinner = ({position = new Vector3(0, 0, 0), speedMultiply = 1}: BlockStartType) => {
 
     const [speed] = useState(() => (Math.random() + 0.3) * (Math.random() < 0.5 ? -1 : 1))
 
@@ -50,7 +52,7 @@ export const BlockSpinner = ({position = new Vector3(0, 0, 0)}: BlockStartType) 
     useFrame((state) => {
         const elapsedTime = state.clock.elapsedTime
 
-        const eulerRotation = new Euler(0, elapsedTime * speed, 0)
+        const eulerRotation = new Euler(0, (elapsedTime * speedMultiply) * speed, 0)
         const quaternionRotation = new Quaternion()
         quaternionRotation.setFromEuler(eulerRotation)
         twisterObstacle.current?.setNextKinematicRotation(quaternionRotation)
@@ -75,17 +77,19 @@ export const BlockSpinner = ({position = new Vector3(0, 0, 0)}: BlockStartType) 
             >
                 <mesh
                     geometry={boxGeometry}
-                    material={obstacleMaterial}
+                    // material={obstacleMaterial}
                     scale={[3.5, 0.3, 0.3]}
                     castShadow
                     receiveShadow
-                />
+                >
+                    <meshStandardMaterial color={`hsl(${Math.random() * 360}, 50%, 75%)`}/>
+                </mesh>
             </RigidBody>
         </group>
     )
 }
 
-export const BlockLimbo = ({position = new Vector3(0, 0, 0)}: BlockStartType) => {
+export const BlockLimbo = ({position = new Vector3(0, 0, 0), speedMultiply = 1}: BlockStartType) => {
 
     const [timeOffset] = useState(() => Math.random() * 2 * Math.PI)
 
@@ -93,8 +97,7 @@ export const BlockLimbo = ({position = new Vector3(0, 0, 0)}: BlockStartType) =>
 
     useFrame((state) => {
         const elapsedTime = state.clock.elapsedTime
-
-        const y = Math.sin(elapsedTime + timeOffset) + 1.15
+        const y = Math.sin(elapsedTime * speedMultiply + timeOffset) + 1.15
         const quaternionTranslation = new Quaternion(position.x, position.y + y, position.z)
         upDownObstacle.current?.setNextKinematicTranslation(quaternionTranslation)
         // twisterObstacle.current?.setNextKinematicRotation(quaternionRotation)
@@ -119,17 +122,19 @@ export const BlockLimbo = ({position = new Vector3(0, 0, 0)}: BlockStartType) =>
             >
                 <mesh
                     geometry={boxGeometry}
-                    material={obstacleMaterial}
+                    // material={obstacleMaterial}
                     scale={[3.5, 0.3, 0.3]}
                     castShadow
                     receiveShadow
-                />
+                >
+                    <meshStandardMaterial color={`hsl(${Math.random() * 360}, 50%, 75%)`}/>
+                </mesh>
             </RigidBody>
         </group>
     )
 }
 
-export const BlockAxe = ({position = new Vector3(0, 0, 0)}: BlockStartType) => {
+export const BlockAxe = ({position = new Vector3(0, 0, 0), speedMultiply = 1}: BlockStartType) => {
 
     const [timeOffset] = useState(() => Math.random() * 2 * Math.PI)
     const [speed] = useState(() => Math.random() + 1.2)
@@ -139,7 +144,7 @@ export const BlockAxe = ({position = new Vector3(0, 0, 0)}: BlockStartType) => {
     useFrame((state) => {
         const elapsedTime = state.clock.elapsedTime * speed
 
-        const x = Math.sin(elapsedTime + timeOffset) * 1.2
+        const x = Math.sin(elapsedTime * speedMultiply + timeOffset) * 1.2
         const quaternionTranslation = new Quaternion(position.x + x, position.y + 0.75, position.z)
         upDownObstacle.current?.setNextKinematicTranslation(quaternionTranslation)
         // twisterObstacle.current?.setNextKinematicRotation(quaternionRotation)
@@ -164,11 +169,13 @@ export const BlockAxe = ({position = new Vector3(0, 0, 0)}: BlockStartType) => {
             >
                 <mesh
                     geometry={boxGeometry}
-                    material={obstacleMaterial}
+                    // material={obstacleMaterial}
                     scale={[1.5, 1.5, 0.3]}
                     castShadow
                     receiveShadow
-                />
+                >
+                    <meshStandardMaterial color={`hsl(${Math.random() * 360}, 50%, 75%)`}/>
+                </mesh>
             </RigidBody>
         </group>
     )
@@ -249,6 +256,15 @@ export const Level1 = ({count = 5, types = [BlockSpinner, BlockAxe, BlockLimbo]}
         return obstacles
     }, [count, types])
 
+    const {speed} = useControls({
+        speed: {
+            value: 1,
+            min: 1,
+            max: 20,
+            step: 1
+        }
+    })
+
     return (
         <>
             <RigidBody type='fixed' restitution={0.2} friction={0}>
@@ -258,7 +274,7 @@ export const Level1 = ({count = 5, types = [BlockSpinner, BlockAxe, BlockLimbo]}
             </RigidBody>
             <BlockStart position={new Vector3(0, 0, 0)}/>
             {roadOfDeath.map((Obstacle, index) => (
-                <Obstacle key={index} position={new Vector3(0, 0, (index + 1) * -4)}/>
+                <Obstacle key={index} speedMultiply={speed} position={new Vector3(0, 0, (index + 1) * -4)}/>
             ))}
             <BlockEnd position={new Vector3(0, 0, (roadOfDeath.length + 1) * -4)}/>
             <CuboidCollider

@@ -36,8 +36,6 @@ const Three48 = () => {
 
     })
 
-    console.log(portalShaderRef)
-
     return (
         <>
             <Perf position='top-left'/>
