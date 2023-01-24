@@ -8,7 +8,7 @@ import {Controls} from "../../pages/_app";
 
 export const Player = () => {
 
-    const [smoothedCameraPosition] = useState(() => new Vector3())
+    const [smoothedCameraPosition] = useState(() => new Vector3(10, 10, 10))
     const [smoothedCameraTarget] = useState(() => new Vector3())
 
     const player = useRef<RigidBodyApi | null>(null)
@@ -91,8 +91,8 @@ export const Player = () => {
         cameraTarget.copy(position!)
         cameraTarget.y += 0.25
 
-        smoothedCameraPosition.lerp(cameraPosition, 0.1)
-        smoothedCameraTarget.lerp(cameraTarget, 0.1)
+        smoothedCameraPosition.lerp(cameraPosition, 5 * delta)
+        smoothedCameraTarget.lerp(cameraTarget, 5 * delta)
 
         state.camera.position.copy(smoothedCameraPosition)
         state.camera.lookAt(smoothedCameraTarget)
