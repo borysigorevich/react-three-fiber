@@ -2,7 +2,7 @@ import React, {ElementType, useEffect, useMemo, useRef, useState} from 'react';
 
 import {Vector3, BoxGeometry, MeshStandardMaterial, ColorManagement, Quaternion, Euler, Mesh} from 'three'
 import {useFrame} from '@react-three/fiber'
-import {useGLTF} from '@react-three/drei'
+import {useGLTF, Float, Text} from '@react-three/drei'
 import {RigidBody, RigidBodyApi, CuboidCollider} from '@react-three/rapier'
 import {useControls} from "leva";
 
@@ -20,10 +20,15 @@ ColorManagement.legacyMode = false
 
 const boxGeometry = new BoxGeometry(1, 1, 1)
 
-const floor1Material = new MeshStandardMaterial({color: 'limegreen'})
-const floor2Material = new MeshStandardMaterial({color: `hsl(${Math.random() * 360}, 50%, 75%)`})
-const obstacleMaterial = new MeshStandardMaterial({color: 'orangered'})
-const wallMaterial = new MeshStandardMaterial({color: 'slategrey'})
+const floor1Material = new MeshStandardMaterial({color: '#111', metalness: 0, roughness: 0})
+// const floor1Material = new MeshStandardMaterial({color: 'limegreen', metalness: 0, roughness: 0})
+// const floor2Material = new MeshStandardMaterial({color: `hsl(${Math.random() * 360}, 50%, 75%)`})
+const floor2Material = new MeshStandardMaterial({color: '#222', metalness: 0, roughness: 0})
+// const floor2Material = new MeshStandardMaterial({color: 'greenyellow', metalness: 0, roughness: 0})
+const obstacleMaterial = new MeshStandardMaterial({color: '#f00', metalness: 0, roughness: 1})
+// const obstacleMaterial = new MeshStandardMaterial({color: 'orangered', metalness: 0, roughness: 1})
+const wallMaterial = new MeshStandardMaterial({color: '#877', metalness: 0, roughness: 0})
+// const wallMaterial = new MeshStandardMaterial({color: 'slategrey', metalness: 0, roughness: 0})
 
 const BlockStart = (
     {
@@ -32,6 +37,17 @@ const BlockStart = (
 ) => {
     return (
         <group position={position}>
+            <Float>
+                <Text
+                    position={[1.2, 1, 0]}
+                    scale={0.5}
+                    textAlign='right'
+                    lineHeight={0.75}
+                    maxWidth={2}
+                    rotation-y={Math.PI * -0.2}
+                    font='/bebas-neue-v9-latin-regular.woff'
+                >Marble Race</Text>
+            </Float>
             <mesh
                 position-y={-0.1}
                 receiveShadow
@@ -77,12 +93,12 @@ export const BlockSpinner = ({position = new Vector3(0, 0, 0), speedMultiply = 1
             >
                 <mesh
                     geometry={boxGeometry}
-                    // material={obstacleMaterial}
+                    material={obstacleMaterial}
                     scale={[3.5, 0.3, 0.3]}
                     castShadow
                     receiveShadow
                 >
-                    <meshStandardMaterial color={`hsl(${Math.random() * 360}, 50%, 75%)`}/>
+                    {/*<meshStandardMaterial color={`hsl(${Math.random() * 360}, 50%, 75%)`}/>*/}
                 </mesh>
             </RigidBody>
         </group>
@@ -122,12 +138,12 @@ export const BlockLimbo = ({position = new Vector3(0, 0, 0), speedMultiply = 1}:
             >
                 <mesh
                     geometry={boxGeometry}
-                    // material={obstacleMaterial}
+                    material={obstacleMaterial}
                     scale={[3.5, 0.3, 0.3]}
                     castShadow
                     receiveShadow
                 >
-                    <meshStandardMaterial color={`hsl(${Math.random() * 360}, 50%, 75%)`}/>
+                    {/*<meshStandardMaterial color={`hsl(${Math.random() * 360}, 50%, 75%)`}/>*/}
                 </mesh>
             </RigidBody>
         </group>
@@ -169,12 +185,12 @@ export const BlockAxe = ({position = new Vector3(0, 0, 0), speedMultiply = 1}: B
             >
                 <mesh
                     geometry={boxGeometry}
-                    // material={obstacleMaterial}
+                    material={obstacleMaterial}
                     scale={[1.5, 1.5, 0.3]}
                     castShadow
                     receiveShadow
                 >
-                    <meshStandardMaterial color={`hsl(${Math.random() * 360}, 50%, 75%)`}/>
+                    {/*<meshStandardMaterial color={`hsl(${Math.random() * 360}, 50%, 75%)`}/>*/}
                 </mesh>
             </RigidBody>
         </group>

@@ -15,7 +15,7 @@ type GameStoreType = {
 
 export const useGameStore = create(subscribeWithSelector<GameStoreType>((setState) => {
     return {
-        blocksCount: 25,
+        blocksCount: 10,
         phase: 'ready',
         miliSec: 0,
         sec: 0,
